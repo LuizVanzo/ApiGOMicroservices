@@ -1,0 +1,90 @@
+definitions:
+  main.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  main.TokenResponse:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  main.User:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:3001
+info:
+  contact: {}
+  description: API de autenticação com JWT
+  title: Auth Service API
+  version: "1.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Autentica um usuário e retorna access e refresh tokens
+      parameters:
+      - description: Credenciais do Usuário
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/main.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.TokenResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Faz login do usuário
+      tags:
+      - auth
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Cria um novo usuário com username e password
+      parameters:
+      - description: Dados do Usuário
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/main.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.User'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Registra um novo usuário
+      tags:
+      - auth
+swagger: "2.0"
